@@ -1,0 +1,6 @@
+LIBRARY LOG.DLL
+
+EXPORTS
+  GetLogInterfaceVersion 
+  CreateLogObject
+  ReleaseLogObject
