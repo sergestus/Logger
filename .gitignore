@@ -41,3 +41,44 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Visual Studio
+*.aps
+*.suo
+*.sdf
+*.pdb
+*.ilk
+*.exe
+*.ipch
+*.tlog
+*.lastbuildstate
+*.log
+*.obj
+*.pch
+*.res
+*.manifest
+*.idb
+*.exp
+*.lib
+*.dll
+*.mac
+*.bmf
+*.obj.oacr.root.amd64fre.pft.xml
+*.obj.oacr.root.amd64fre.pft.xml
+*.obj.oacr.root.amd64fre.pft.xml
+*.obj.oacr.root.amd64fre.pft.xml
+*.obj.oacr.root.amd64fre.pft.xml
+*.sys
+*.obj.oacr.root.amd64fre.pft.xml
+*.obj.oacr.root.x86fre.pft.xml
+*.obj.oacr.root.x86fre.pft.xml
+*.obj.oacr.root.x86fre.pft.xml
+*.obj.oacr.root.x86fre.pft.xml
+*.obj.oacr.root.x86fre.pft.xml
+*.obj.oacr.root.x86fre.pft.xml
+*.vcxprojResolveAssemblyReference.cache
+*.opensdf
+*.suo
+*.unsuccessfulbuild
+
+
