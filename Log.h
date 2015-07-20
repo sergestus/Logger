@@ -269,7 +269,11 @@
 			if(instance)
 			{
 				NamedMutexObject mutex( CreatePolicy::GetMutexName() );		
-				if(instance) delete instance;
+				if(instance)
+				{
+					delete instance;
+					instance = NULL;
+				}
 			}
 		}
 	};
