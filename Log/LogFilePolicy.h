@@ -50,7 +50,11 @@ public:
 
 	unsigned __int64 GetTimeMs()
 	{
-		return GetTickCount64();
+		#ifdef ENABLE_FULL_WINAPI
+			return GetTickCount64();
+		#else
+			return (__int64) GetTickCount();
+		#endif	// ENABLE_FULL_WINAPI
 	}
 
 protected:
