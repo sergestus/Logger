@@ -110,7 +110,7 @@
 
 	struct ILog100 
 	{
-		virtual void Log( unsigned int messageId, char *fmt, ... ) = 0;  
+		virtual void Log( unsigned int messageId, const char *fmt, ... ) = 0;  
 		virtual void RedirectLog( void (*log) (char *)) = 0;
 	};
 
@@ -165,7 +165,7 @@
 			//return false;
 		}
 
-		virtual void Log( unsigned int messageId, char *fmt, ... )
+		virtual void Log( unsigned int messageId, const char *fmt, ... )
 		{
 			char out[1024]; 
 			if( FilterMessage(messageId) ) return;
