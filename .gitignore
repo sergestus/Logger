@@ -80,5 +80,5 @@ Temporary Items
 *.opensdf
 *.suo
 *.unsuccessfulbuild
-
+*.map
 
