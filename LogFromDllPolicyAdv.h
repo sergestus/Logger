@@ -19,46 +19,79 @@
 /*    <http://www.gnu.org/licenses/>.                                         */
 /******************************************************************************/
 
-#include "stdafx.h"
-#include "..\Log.h"
-#include "..\TLog.h"
-#include "LogFilePolicy.h"
-#include "..\LogDebugPolicy.h"
-#include "LogFileConfigPolicy.h"
-
-#if defined(LOG_DEBUG_POLICY)
-	typedef TLog< LogFileConfigPolicy, LogDebugPolicy > LogType;
-#elif defined(LOG_FILE_POLICY) 
-	typedef TLog< LogFileConfigPolicy, LogFilePolicy > LogType;
-#else
-	#error Log policy wasn't defined
-#endif
-
-LogType *Log;
-
-int GetLogInterfaceVersion()
+#pragma once
+class LogFromDllPolicyAdv
 {
-  return LOG_INTERFACE_VERSION;
-}
+private:
+	LogFromDllPolicyAdv():handle(NULL)
+	{		
+		mainInterface = NULL;
+		created = true;
+		const char *error = NULL;
+		do
+		{
+			handle = LoadLibrary("log.dll");
 
-ILog100* CreateLogObject()
-{
-	try
-	{
-		Log = new LogType();
-	}
-	catch(...)
-	{
-		Log = NULL;
-	}
-	return Log;
-}
+			if( handle == NULL )
+			{				
+				error = "library error loading\n";
+				break;
+			}
 
-void ReleaseLogObject()
-{
-	if(Log)
-	{
-		delete Log;
-		Log = NULL;
+			#define DEFINE_FUNCTION( ret, func, sign )	func = (func##Type)GetProcAddress(handle, #func);\
+														if(func == NULL)\
+														{\
+															error = "function " #func " error loading\n";\
+															break;\
+														}
+				DLL_FUNCTIONS
+			#undef DEFINE_FUNCTION
+
+			if( LOG_INTERFACE_VERSION > GetLogInterfaceVersion() ) 
+			{				
+				error = "dll version doesn't correspond to interface\n";;
+				break;
+			}	
+
+			mainInterface = CreateLogObject();
+			if( mainInterface == NULL )
+			{
+				error = "error creating log object\n";;
+				break;
+			}
+
+		}while(0);		
+
+		if( mainInterface == NULL )
+		{
+			created = false;
+			mainInterface = new TLog<LogBaseConfigPolicy,LogDebugPolicy>();
+			mainInterface->Log( LOG_ERROR, "Failed to create log object from dll: %s", error );			
+		}
 	}
-}
+
+	virtual ~LogFromDllPolicyAdv()
+	{
+		if(created)	ReleaseLogObject();				
+		else delete (TLog<LogBaseConfigPolicy,LogDebugPolicy>*) mainInterface;
+		if(handle) FreeLibrary(handle);
+	}
+
+	#define DEFINE_FUNCTION( ret, func, sign )	func##Type func;
+		DLL_FUNCTIONS
+	#undef DEFINE_FUNCTION
+
+
+	ILog100 *mainInterface;         
+
+	static char *GetMutexName()
+	{
+		return "log_creare_mutex";        
+	}
+
+	template <class CreatePolicy, class MainInterface, class NamedMutexObject> 
+		friend class TSingleton;
+
+	HINSTANCE handle;
+	bool created;
+};

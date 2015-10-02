@@ -118,3 +118,18 @@ parameters:
   LogFilePolicy – logger policy, writing messages in a file, in the current 
    directory with the same as application name, with extension log.
   LogFromDllPolicy – policy loading and creating logger from dll.
+
+10. ADVANCED LOG
+
+The advanced log is has the same functionality, but when there is no log.dll in
+the current folder the  messages logs into standard debug output. Just include 
+logadv.h into your project and copy following files into the same directory:
+  Log.h
+  TLog.h
+  LogBaseConfigPolicy.h
+  LogDebugPolicy.h
+  LogFromDllPolicyAdv.h
+
+
+
+ 

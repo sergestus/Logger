@@ -19,25 +19,13 @@
 /*    <http://www.gnu.org/licenses/>.                                         */
 /******************************************************************************/
 
-#include "stdafx.h"
-//#include "..\Log.h"
-#include "..\LogAdv.h"
+#pragma once
 
+#include "Log.h"
+#include "TLog.h"
+#include "LogBaseConfigPolicy.h"
+#include "LogDebugPolicy.h"
+#include "LogFromDllPolicyAdv.h"
 
-int main(int argc, char* argv[])
-{
-	//log_dbg("Some debug...\n");	
- //	Sleep(100);
-	//log_inf("Some info...\n");
- //	Sleep(100);
-	//log_wrn("Some warning...\n");
-	//Sleep(100);
-	//log_err("Some error...\n");	
-
-	char *str = new char[10000];
-	for( int i = 0; i<10000; i++) str[i]='*';
-	str[10000-1]=0;
-	log_err("Some string %s\n",str);	
-	system("pause");
-}
-
+#undef DefaultLog
+#define DefaultLog TSingleton< LogFromDllPolicyAdv, ILog100, NamedMutexObject >

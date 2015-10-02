@@ -19,25 +19,38 @@
 /*    <http://www.gnu.org/licenses/>.                                         */
 /******************************************************************************/
 
-#include "stdafx.h"
-//#include "..\Log.h"
-#include "..\LogAdv.h"
+#pragma once
 
-
-int main(int argc, char* argv[])
+class LogDebugPolicy 
 {
-	//log_dbg("Some debug...\n");	
- //	Sleep(100);
-	//log_inf("Some info...\n");
- //	Sleep(100);
-	//log_wrn("Some warning...\n");
-	//Sleep(100);
-	//log_err("Some error...\n");	
+public:
+	LogDebugPolicy(IConfig100 *iConfig)
+	{
+		if( iConfig->GetString("common","appName",prefix,sizeof(prefix),"unknown") == false )
+			strcpy_s(prefix,"unknown");
+		strcat_s(prefix,": ");
+	}
 
-	char *str = new char[10000];
-	for( int i = 0; i<10000; i++) str[i]='*';
-	str[10000-1]=0;
-	log_err("Some string %s\n",str);	
-	system("pause");
-}
+	virtual ~LogDebugPolicy()
+	{
+	}
 
+	void Write( char *out )
+	{
+		OutputDebugString( prefix );
+		OutputDebugString( out );
+	}
+
+	unsigned __int64 GetTimeMs()
+	{
+		#ifdef ENABLE_FULL_WINAPI
+			return GetTickCount64();
+		#else
+			return (__int64) GetTickCount();
+		#endif	// ENABLE_FULL_WINAPI
+	}
+
+
+protected:
+	char prefix[512];
+};
